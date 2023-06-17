@@ -1,3 +1,4 @@
+from load_balancer import LoadBalancer
 from threading import Thread
 
 '''
@@ -32,5 +33,9 @@ class Master():
     def receive_worker_data(self):
         pass
 
+    def test(self):
+        print('lb test')
+
 if __name__ == "__main__":
-    Master()
+    m = Master()
+    lb = LoadBalancer(m)
