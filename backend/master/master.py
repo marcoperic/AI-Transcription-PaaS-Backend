@@ -33,6 +33,18 @@ class Master():
     def receive_worker_data(self):
         pass
 
+    '''
+    Add a worker to the worker list.
+    '''
+    def add_worker(self, name, ip):
+        pass
+
+    '''
+    Remove a worker from the worker list.
+    '''
+    def remove_worker(self, name):
+        pass
+    
     def test(self):
         print('lb test')
 
