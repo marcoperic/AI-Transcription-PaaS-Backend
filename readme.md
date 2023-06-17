@@ -15,7 +15,6 @@ if audio --> generate transcript and return a subtitle for it... .srt could be p
 deepl.com would be used for the translation component.
 before api access is used, a selenium bot could be used to get translation after transcript is acquired.
 
-
 # Technologies:
 
 docker is used for containerizing the backend component.
