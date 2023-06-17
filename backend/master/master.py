@@ -10,14 +10,26 @@ class Master():
         # Instance variables
         self.workers = []
         # Thread declarations
-        self.receive_data_thread = Thread(target = self.receive_data)
+        self.check_for_data = Thread(target = self.check_for_data)
         # Thread initializations
-        self.receive_data_thread.start()
+        self.check_for_data.start()
 
     '''
-    Scan file directory for new files. When files are added, handle appropriately.
+    Scan file system for new files. When files are added, send to dispatch to coordinate with load balancer.
     '''
-    def receive_data(self):
+    def check_for_data(self):
+        pass
+
+    '''
+    Read JSON instructions and package file before sending to a node determined by the load balancer
+    '''
+    def dispatch(self):
+        pass
+
+    '''
+    Handle incoming data from worker node and send back to the frontend.
+    '''
+    def receive_worker_data(self):
         pass
 
 if __name__ == "__main__":
