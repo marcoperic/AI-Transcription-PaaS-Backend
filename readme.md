@@ -24,4 +24,6 @@ react for the frontend
 
 ffmpeg for video compression
 
+mozilla's deepspeech used for transcription
+
 tokenize the transcript by sentences ==> each token is sent to deepl for translation... cache may be used in the future to reduce load on selenium threads.
