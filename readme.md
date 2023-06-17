@@ -21,8 +21,16 @@ docker is used for containerizing the backend component.
 
 react for the frontend
 
-ffmpeg for video compression
+ffmpeg for video compression. audio should also be compressed.
 
 mozilla's deepspeech used for transcription
 
 tokenize the transcript by sentences ==> each token is sent to deepl for translation... cache may be used in the future to reduce load on selenium threads.
+
+# Parallel Workflow:
+
+A central backend node will share work across several other nodes. This may be controlled with Docker Swarm, but will likely be done manually.
+
+Parallel processing practices will be employed to:
+- Send transcription tokens to nodes running Selenium backend
+- Encoding subtitles (for video)
