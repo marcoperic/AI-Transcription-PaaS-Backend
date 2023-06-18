@@ -2,7 +2,7 @@ from load_balancer import LoadBalancer
 from threading import Thread
 from pathlib import Path
 from time import sleep
-import ffmpeg
+import ffmpeg # choco install ffmpeg
 import json
 import os
 
@@ -35,8 +35,8 @@ class Master():
         file = MEDIA_DIR + fileName + '.' + ext
         instructions = MEDIA_DIR + '.json'
         # instructions = json.load(instructions)
-        self.file_queue.append((file, instructions))
-        print('successfully enqueued ' + fileName)
+        self.file_queue.append((os.path.abspath(file), instructions))
+        print('successfully enqueued ' + fileName + '\n')
 
     '''
     Read JSON instructions and package file before sending to a node determined by the load balancer
@@ -46,9 +46,10 @@ class Master():
             if (len(self.file_queue) > 0):
                 file, instructions = self.file_queue.pop(0)
                 file = r"{}".format(file)
-                extension = str('' + file).split('.')[1]
-                # print(file)
-                print(ffmpeg.probe(file))                
+                print(file)
+                probe = ffmpeg.probe(file)
+                print(probe)
+
     '''
     Handle incoming data from worker node and send back to the frontend. Delete the files in directory.
     '''
