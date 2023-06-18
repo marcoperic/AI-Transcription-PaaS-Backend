@@ -1,8 +1,9 @@
 from load_balancer import LoadBalancer
 from threading import Thread
+from utils import extract_audio
 from pathlib import Path
 from time import sleep
-import ffmpeg # choco install ffmpeg
+import ffmpeg # choco install ffmpeg / sudo apt-get install ffmpeg
 import json
 import os
 
@@ -47,6 +48,8 @@ class Master():
             if (len(self.file_queue) > 0):
                 file, instructions = self.file_queue.pop(0)
                 file = r"{}".format(file)
+                print('extracting audio')
+                extract_audio(file)
                 probe = ffmpeg.probe(file)
 
                 if (probe['streams'][0]['codec_type'] == 'video'):
