@@ -1,5 +1,11 @@
 from load_balancer import LoadBalancer
 from threading import Thread
+from pathlib import Path
+from time import sleep
+import json
+import os
+
+MEDIA_DIR = 'backend/master/media/'
 
 '''
 Master class that receives data and dispatches 
@@ -10,16 +16,25 @@ class Master():
     def __init__(self) -> None:
         # Instance variables
         self.workers = []
+        self.file_queue = []
+
         # Thread declarations
-        self.check_for_data = Thread(target = self.check_for_data)
+        # self.check_for_data_thread = Thread(target = self.check_for_data)
+        self.dispatch_thread = Thread(target = self.dispatch)
+
         # Thread initializations
-        self.check_for_data.start()
+        # self.check_for_data.start()
+        self.dispatch_thread.start()
 
     '''
-    Scan file system for new files. When files are added, send to dispatch to coordinate with load balancer.
+    Add file and its instructions into the dispatch queue. Instruction file and media file are of the same name.
+    Keys in the JSON file include: file size, extension, original language, target language
     '''
-    def check_for_data(self):
-        pass
+    def enqueue(self, fileName, ext):
+        file = MEDIA_DIR + fileName + '.' + ext
+        instructions = MEDIA_DIR + '.json'
+        instructions = json.load(instructions)
+        self.file_queue.append((file, instructions))
 
     '''
     Read JSON instructions and package file before sending to a node determined by the load balancer
@@ -28,7 +43,7 @@ class Master():
         pass
 
     '''
-    Handle incoming data from worker node and send back to the frontend.
+    Handle incoming data from worker node and send back to the frontend. Delete the files in directory.
     '''
     def receive_worker_data(self):
         pass
