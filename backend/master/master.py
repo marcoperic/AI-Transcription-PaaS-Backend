@@ -40,15 +40,19 @@ class Master():
 
     '''
     Read JSON instructions and package file before sending to a node determined by the load balancer
+    Grab the audio track from the file and send it to be transcribed by a worker
     '''
     def dispatch(self):
         while True:
             if (len(self.file_queue) > 0):
                 file, instructions = self.file_queue.pop(0)
                 file = r"{}".format(file)
-                print(file)
                 probe = ffmpeg.probe(file)
-                print(probe)
+
+                if (probe['streams'][0]['codec_type'] == 'video'):
+                    print('video detected')
+                else:
+                    continue
 
     '''
     Handle incoming data from worker node and send back to the frontend. Delete the files in directory.
@@ -74,4 +78,4 @@ class Master():
 if __name__ == "__main__":
     m = Master()
     lb = LoadBalancer(m)
-    m.enqueue('kitten', 'jfif')
+    m.enqueue('kitten', 'mp4')
