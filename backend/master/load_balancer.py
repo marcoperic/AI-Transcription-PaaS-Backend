@@ -1,13 +1,12 @@
 '''
-Utility that keeps track of CPU usage trends
-for the workers and assigns work to the nodes
-under the least load. 
+Utility that keeps track of CPU usage trends for the workers and assigns work to the nodes under the least load. 
 '''
 
 from worker_wrapper import Worker
 
 class LoadBalancer():
     def __init__(self, instance) -> None:
+        self.master_instance = instance
         self.active_workers = []
     
     '''
@@ -35,6 +34,12 @@ class LoadBalancer():
             self.active_workers.sort(key=lambda x: x.cpu_trend) # sorts in ascending order, cpu load trend
             selection = self.active_workers[0]
             selection.enqueue_job(job)
+
+    '''
+    Function called by the worker to send a job back to the master.
+    '''
+    def receive_job(self, job):
+        self.master_instance.receive_worker_data(job)
 
     '''
     Function called by the master to remove a worker. Allows for graceful connection termination?

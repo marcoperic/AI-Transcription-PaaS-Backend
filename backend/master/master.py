@@ -54,12 +54,12 @@ class Master():
                     payload = (audio, instructions)
                     self.lb.assign_job(payload)
                 else:
-                    continue
+                    pass
 
     '''
     Handle incoming data from worker node and send back to the frontend. Delete the files in directory.
     '''
-    def receive_worker_data(self):
+    def receive_worker_data(self, job):
         pass
 
     '''

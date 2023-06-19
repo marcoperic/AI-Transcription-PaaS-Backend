@@ -82,6 +82,12 @@ class Worker():
             self.usage_data.append(data)
             self.cpu_trend = sum(self.usage_data) / 100
 
+    '''
+    Send job back to the load balancer and master. Remember to dequeue from list.
+    '''
+    def return_complete_job(self, job):
+        pass
+
     def terminate_connection(self):
         self.connection.close()
 
