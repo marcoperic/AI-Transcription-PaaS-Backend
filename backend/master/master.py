@@ -1,7 +1,6 @@
 from load_balancer import LoadBalancer
 from threading import Thread
 from utils import extract_audio
-from time import sleep
 import ffmpeg # choco install ffmpeg / sudo apt-get install ffmpeg
 import json
 import os
@@ -74,7 +73,7 @@ class Master():
     Remove a worker from the worker list.
     '''
     def remove_worker(self, name):
-        pass
+        self.lb.master_remove_worker(name)
     
     def test(self):
         print('lb test')

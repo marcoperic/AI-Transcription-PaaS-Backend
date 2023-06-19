@@ -3,6 +3,7 @@ A wrapper class to store statistics and maintain a connection with the remote wo
 '''
 
 from threading import Thread
+from utils import SERVER_CODES
 import zmq
 import time
 import sys
@@ -29,8 +30,8 @@ class Worker():
         except:
             print('exception raised by worker: ' + self.name + ', ip: ' + self.ip)
 
-        # set up thread that periodically sends and receives data from worker node
         self.data_transfer_thread = None
+        self.cpu_stats_thread = Thread(target=self.update_cpu_stats)
 
     def establish_connection(self): # connect to worker node
         context = zmq.Context()
@@ -43,16 +44,36 @@ class Worker():
         self.data_transfer_thread = Thread(target=self.data_transfer)
         self.data_transfer_thread.start()
 
+    '''
+    The heart of communication between the master and the worker node. Send jobs to the node from the jobs queue.
+    Receive responses from the server and process them using process_worker_response.
+    '''
     def data_transfer(self):
         while True:
-            # msg = self.connection.recv()
-            # print(msg)
-            self.connection.send(b"client message to server1")
-            self.connection.send(b"client message to server2")
-            time.sleep(5)
+            msg = self.connection.recv()
+            print(msg)
+            self.process_worker_response(self, msg)
+            self.connection.send(b"sending instructions to server")
+            time.sleep(1)
 
-    def send_job(self):
+    '''
+    Process the response from the worker. Can be completed jobs or statistics about CPU usage for load balancing.
+    : response : JSON package. server code can help ascertain which type of response it is.
+    '''
+    def process_worker_response(self, response):
         pass
+
+    def enqueue_job(self, job):
+        self.jobs.append(job)
+
+    def update_cpu_stats(self, data):
+        if (len(self.usage_data) < 100):
+            self.usage_data.append(data)
+            self.cpu_trend = sum(self.usage_data) / len(self.usage_data)
+        else:
+            self.usage_data.pop(0)
+            self.usage_data.append(data)
+            self.cpu_trend = sum(self.usage_data) / 100
 
     def terminate_connection(self):
         self.connection.close()

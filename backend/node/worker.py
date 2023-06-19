@@ -5,7 +5,6 @@ class Worker():
 
 
 '''
-
 # worker node sample
 import time
 import zmq
@@ -18,10 +17,9 @@ socket.bind("tcp://*:%s" % port)
 socket.recv()
 
 while True:
-    # socket.send(b"Server message to client3")
+    socket.send(b"payload from server: [ip]")
     msg = socket.recv()
     print(msg)
-    # time.sleep(1)
-
+    time.sleep(5)
 
 '''

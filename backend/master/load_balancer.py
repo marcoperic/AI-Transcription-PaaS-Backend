@@ -38,6 +38,12 @@ class LoadBalancer():
     def update_worker_utilization(self):
         pass
 
+    def master_remove_worker(self, name):
+        for worker in self.active_workers:
+            if worker.name == name:
+                worker.terminate_connection()
+                worker.destroy()
+
     '''
     To be called by Worker class when exceptions or thrown or connection is closed
     '''
