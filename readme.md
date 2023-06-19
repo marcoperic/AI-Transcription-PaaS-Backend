@@ -27,6 +27,8 @@ mozilla's deepspeech used for transcription
 
 tokenize the transcript by sentences ==> each token is sent to deepl for translation... cache may be used in the future to reduce load on selenium threads.
 
+using the following git repo for subs generation: https://github.com/abhirooptalasila/AutoSub
+
 # Parallel Workflow:
 
 A central backend node will share work across several other nodes. This may be controlled with Docker Swarm, but will likely be done manually.

@@ -1,7 +1,6 @@
 from load_balancer import LoadBalancer
 from threading import Thread
 from utils import extract_audio
-from pathlib import Path
 from time import sleep
 import ffmpeg # choco install ffmpeg / sudo apt-get install ffmpeg
 import json
@@ -82,4 +81,5 @@ class Master():
 
 if __name__ == "__main__":
     m = Master()
-    m.enqueue('kitten', 'mp4')
+    m.lb.add_worker('goober', '192.192.192.100')
+    # m.enqueue('kitten', 'mp4')
