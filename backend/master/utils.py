@@ -5,3 +5,4 @@ def extract_audio(file):
     print(name)
     my_clip = mp.VideoFileClip(file)
     my_clip.audio.write_audiofile(name + '.ogg')
+    return str(name + '.ogg')

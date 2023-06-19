@@ -19,6 +19,7 @@ class Master():
         # Instance variables
         self.workers = []
         self.file_queue = []
+        self.lb = LoadBalancer(self)
 
         # Thread declarations
         # self.check_for_data_thread = Thread(target = self.check_for_data)
@@ -48,12 +49,13 @@ class Master():
             if (len(self.file_queue) > 0):
                 file, instructions = self.file_queue.pop(0)
                 file = r"{}".format(file)
-                print('extracting audio')
-                extract_audio(file)
+                audio = extract_audio(file)
                 probe = ffmpeg.probe(file)
 
                 if (probe['streams'][0]['codec_type'] == 'video'):
-                    print('video detected')
+                    # modify the instructions file and send the audio clip to a worker.
+                    payload = (audio, instructions)
+                    self.lb.assign_job(payload)
                 else:
                     continue
 
@@ -67,7 +69,7 @@ class Master():
     Add a worker to the worker list.
     '''
     def add_worker(self, name, ip):
-        pass
+        self.lb.add_worker(name, ip)
 
     '''
     Remove a worker from the worker list.
@@ -80,5 +82,4 @@ class Master():
 
 if __name__ == "__main__":
     m = Master()
-    lb = LoadBalancer(m)
     m.enqueue('kitten', 'mp4')
