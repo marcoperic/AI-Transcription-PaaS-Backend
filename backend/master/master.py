@@ -20,14 +20,13 @@ class Master():
         self.lb = LoadBalancer(self)
 
         # Thread declarations
-        # self.check_for_data_thread = Thread(target = self.check_for_data)
         self.dispatch_thread = Thread(target = self.dispatch)
 
         # Thread initializations
-        # self.check_for_data.start()
         self.dispatch_thread.start()
 
     '''
+    :CALLED BY API:
     Add file and its instructions into the dispatch queue. Instruction file and media file are of the same name.
     Keys in the JSON file include: file size, extension, original language, target language
     '''
@@ -74,9 +73,6 @@ class Master():
     '''
     def remove_worker(self, name):
         self.lb.master_remove_worker(name)
-    
-    def test(self):
-        print('lb test')
 
 if __name__ == "__main__":
     m = Master()

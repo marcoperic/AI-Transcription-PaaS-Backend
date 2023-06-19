@@ -26,9 +26,15 @@ class LoadBalancer():
     '''
     Checks the list of active workers to see which workers are under the most load.
     Workers under the least amount of load are assigned new jobs.
+    TODO: sort by cpu load trend and by number of jobs in the queue. 
     '''
     def assign_job(self, job):
-        pass
+        if (len(self.active_workers) == 0):
+            raise Exception("Cannot assign job. No active workers.")
+        else:
+            self.active_workers.sort(key=lambda x: x.cpu_trend) # sorts in ascending order, cpu load trend
+            selection = self.active_workers[0]
+            selection.enqueue_job(job)
 
     '''
     Function called by the master to remove a worker. Allows for graceful connection termination?
