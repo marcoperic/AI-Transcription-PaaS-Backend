@@ -12,7 +12,6 @@ PORT = '9091'
 
 class Worker():
 
-
     def __init__(self, lb, name, ip, jobs, cpu_trend, usage_data) -> None:
         self.lb = lb
         self.name = name
@@ -46,14 +45,18 @@ class Worker():
 
     '''
     The heart of communication between the master and the worker node. Send jobs to the node from the jobs queue.
-    Receive responses from the server and process them using process_worker_response.
+    Receive responses from the worker and process them using process_worker_response.
     '''
     def data_transfer(self):
         while True:
-            msg = self.connection.recv()
-            print(msg)
+            msg = self.connection.recv() # response from worker
+            # print(msg)
             self.process_worker_response(self, msg)
-            self.connection.send(b"sending instructions to server")
+
+            if (len(self.jobs) > 0):
+                self.connection.send(b"jobs package being sent to worker")
+            else:
+                self.connection.send(b"[\]") # code to the worker that there are no new jobs.
             time.sleep(1)
 
     '''
@@ -63,6 +66,9 @@ class Worker():
     def process_worker_response(self, response):
         pass
 
+    '''
+    Add a job to the work queue
+    '''
     def enqueue_job(self, job):
         self.jobs.append(job)
 

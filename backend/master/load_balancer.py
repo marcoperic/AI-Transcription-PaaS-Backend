@@ -4,17 +4,15 @@ for the workers and assigns work to the nodes
 under the least load. 
 '''
 
-from threading import Thread
 from worker_wrapper import Worker
 
 class LoadBalancer():
-    # name, ip, number of jobs in queue, CPU util
     def __init__(self, instance) -> None:
         self.active_workers = []
-
-        self.updater = Thread(target=self.update_worker_utilization)
-        self.updater.start()
     
+    '''
+    Add a worker to the list of active workers
+    '''
     def add_worker(self, name, ip):
         print('adding worker')
         self.active_workers.append(Worker(self, name, ip, 0, 0, []))
@@ -33,11 +31,9 @@ class LoadBalancer():
         pass
 
     '''
-    Pulls data from the workers to update the CPU usage statistics.
+    Function called by the master to remove a worker. Allows for graceful connection termination?
+    TODO: ensure that the worker being deleted has no jobs in the queue.
     '''
-    def update_worker_utilization(self):
-        pass
-
     def master_remove_worker(self, name):
         for worker in self.active_workers:
             if worker.name == name:
