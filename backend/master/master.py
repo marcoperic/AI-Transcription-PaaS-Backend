@@ -35,7 +35,7 @@ class Master():
         # instructions = MEDIA_DIR + '.json'
         # instructions = json.load(instructions)
         self.file_queue.append(instructions)
-        print('successfully enqueued ' + fileName + '\n')
+        # print('successfully enqueued ' + fileName + '\n')
 
     '''
     Read JSON instructions and package file before sending to a node determined by the load balancer
@@ -68,4 +68,4 @@ class Master():
 if __name__ == "__main__":
     m = Master()
     m.lb.add_worker('goober', '192.192.192.100')
-    # m.enqueue('kitten', 'mp4')
+    # m.enqueue({})
