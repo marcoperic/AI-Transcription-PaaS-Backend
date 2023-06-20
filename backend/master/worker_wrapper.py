@@ -36,7 +36,7 @@ class Worker():
         self.connection = context.socket(zmq.PAIR)
         self.connection.connect("tcp://localhost:%s" % PORT)
         print(self.name + ' successfully connected to ' + self.ip)
-        self.connection.send(b'ping!')
+        self.connection.send_json({'test': 1})
 
         self.data_transfer_thread = Thread(target=self.data_transfer)
         self.data_transfer_thread.start()
@@ -47,14 +47,14 @@ class Worker():
     '''
     def data_transfer(self):
         while True:
-            msg = self.connection.recv() # response from worker
-            # print(msg)
-            self.process_worker_response(self, msg)
+            msg = self.connection.recv_json() # response from worker
+            print(msg)
+            # self.process_worker_response(self, msg)
 
             if (len(self.jobs) > 0):
-                self.connection.send(b"jobs package being sent to worker")
+                self.connection.send_json({'test':1})
             else:
-                self.connection.send(b"[\]") # code to the worker that there are no new jobs.
+                self.connection.send_json({}) # code to the worker that there are no new jobs.
             time.sleep(self.lb.TRANSMISSION_DELAY)
 
     '''

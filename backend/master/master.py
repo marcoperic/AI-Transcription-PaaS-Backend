@@ -30,11 +30,11 @@ class Master():
     Add file and its instructions into the dispatch queue. Instruction file and media file are of the same name.
     Keys in the JSON file include: file size, extension, original language, target language
     '''
-    def enqueue(self, fileName, ext):
-        file = MEDIA_DIR + fileName + '.' + ext
-        instructions = MEDIA_DIR + '.json'
+    def enqueue(self, instructions):
+        # file = MEDIA_DIR + fileName + '.' + ext
+        # instructions = MEDIA_DIR + '.json'
         # instructions = json.load(instructions)
-        self.file_queue.append((os.path.abspath(file), instructions))
+        self.file_queue.append(instructions)
         print('successfully enqueued ' + fileName + '\n')
 
     '''
@@ -44,20 +44,11 @@ class Master():
     def dispatch(self):
         while True:
             if (len(self.file_queue) > 0):
-                file, instructions = self.file_queue.pop(0)
-                file = r"{}".format(file)
-                audio = extract_audio(file)
-                probe = ffmpeg.probe(file)
-
-                if (probe['streams'][0]['codec_type'] == 'video'):
-                    # modify the instructions file and send the audio clip to a worker.
-                    payload = (audio, instructions)
-                    self.lb.assign_job(payload)
-                else:
-                    pass
+                instructions = self.file_queue.pop(0)
+                self.lb.assign_job(instructions)
 
     '''
-    Handle incoming data from worker node and send back to the frontend. Delete the files in directory.
+    Handle incoming data from worker node and send back to the frontend.
     '''
     def receive_worker_data(self, job):
         pass
