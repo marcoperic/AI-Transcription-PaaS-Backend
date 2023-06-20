@@ -4,7 +4,7 @@ subtitles would be returned. video may be a premium only feature.
 
 
 # Back-end application:
-Autosub is used for transcript generation.
+Autosub is used for transcript generation. **TODO** Integrate OpenAI Whisper instead of deprecated STT models.
 
 deepl.com would be used for the translation component.
 
