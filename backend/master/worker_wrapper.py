@@ -3,10 +3,8 @@ A wrapper class to store statistics and maintain a connection with the remote wo
 '''
 
 from threading import Thread
-from utils import SERVER_CODES
 import zmq
 import time
-import sys
 
 PORT = '9091'
 
@@ -27,7 +25,7 @@ class Worker():
             self.connection_thread = Thread(target=self.establish_connection)
             self.connection_thread.start()
         except:
-            print('exception raised by worker: ' + self.name + ', ip: ' + self.ip)
+            print('Exception raised by worker: ' + self.name + ', ip: ' + self.ip)
 
         self.data_transfer_thread = None
         self.cpu_stats_thread = Thread(target=self.update_cpu_stats)
@@ -57,7 +55,7 @@ class Worker():
                 self.connection.send(b"jobs package being sent to worker")
             else:
                 self.connection.send(b"[\]") # code to the worker that there are no new jobs.
-            time.sleep(1)
+            time.sleep(self.lb.TRANSMISSION_DELAY)
 
     '''
     Process the response from the worker. Can be completed jobs or statistics about CPU usage for load balancing.
@@ -65,7 +63,12 @@ class Worker():
     TODO: BE SURE TO REMOVE JOB FROM QUEUE WHEN RESPONSE IS GIVEN
     '''
     def process_worker_response(self, response):
-        pass
+        if ('worker_name' in response):
+            self.update_cpu_stats(response)
+            return 1
+        else:
+            self.return_complete_job(response)
+            return 0
 
     '''
     Add a job to the work queue
@@ -73,6 +76,9 @@ class Worker():
     def enqueue_job(self, job):
         self.jobs.append(job)
 
+    '''
+    Function to update the CPU usage trend statistic
+    '''
     def update_cpu_stats(self, data):
         if (len(self.usage_data) < 100):
             self.usage_data.append(data)
@@ -86,7 +92,11 @@ class Worker():
     Send job back to the load balancer and master. Remember to dequeue from list.
     '''
     def return_complete_job(self, job):
-        pass
+        self.lb.receive_job(job)
+        #remove the job from the queue
+        for x in self.jobs:
+            if (x['job']['userID'] == job['job']['userID']):
+                self.jobs.remove(x)
 
     def terminate_connection(self):
         self.connection.close()

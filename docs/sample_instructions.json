@@ -1,0 +1,15 @@
+{
+    "job":
+    {
+        "userID": "",
+        "filename": "",
+        "file_dir": "",
+        "media_format": "",
+        "original_language": "",
+        "target_language": "",
+        "encoded_media": "",
+        "encoded_subtitles": "",
+        "premium": false,
+        "priority": false
+    }
+}
