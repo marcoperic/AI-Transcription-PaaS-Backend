@@ -52,7 +52,7 @@ class Worker():
 
             if (len(self.completed_jobs) > 0):
                 if (self.cpu_data != None and self.skips < SKIP_LIMIT):
-                    self.connection.send_json({'test': 1}) # take from completed jobs
+                    self.connection.send_json(self.completed_jobs.pop(0)) # take from completed jobs
                     skips += 1
                 else:
                     skips = 0
@@ -63,6 +63,8 @@ class Worker():
                 else:
                     self.connection.send_json({}) # no data to send
 
+            time.sleep(0.25) # may cause timing problems with other socket? verify no problems here. 
+
     def process_incoming_data(self, task):
         if (task['job']['priority'] == 1):
             self.priority_queue.append(task)
@@ -70,7 +72,7 @@ class Worker():
             self.work_queue.append(task)
 
     def dispatch(self, task):
-        pass
+        self.completed_jobs.append(task)
 
     def gather_cpu_stats(self):
         # Calling psutil.cpu_precent() for 4 seconds
