@@ -4,12 +4,14 @@
         "userID": "",
         "filename": "",
         "file_dir": "",
-        "media_format": "",
+        "encoded_media": "",
         "original_language": "",
         "target_language": "",
-        "encoded_media": "",
+        "encoded_transcript": "",
+        "encoded_translation": "",
         "encoded_subtitles": "",
-        "premium": false,
-        "priority": false
+        "premium": 0,
+        "priority": 0,
+        "extended": 0
     }
 }

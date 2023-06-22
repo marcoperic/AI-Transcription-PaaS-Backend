@@ -6,6 +6,7 @@ from threading import Thread
 from subsai import SubsAI
 from subsai import Tools
 import pysubs2
+import random
 
 PORT = '9091'
 SKIP_LIMIT = 5
@@ -16,6 +17,7 @@ class Worker():
         self.ip = urllib.request.urlopen('https://4.ident.me').read().decode('utf8') #get ipv4 address
         self.name = name
         self.work_queue = []
+        self.priority_queue = []
         self.completed_jobs = []
         self.connection = None
         self.cpu_data = None
@@ -30,7 +32,7 @@ class Worker():
         self.data_transfer_thread = None
         self.cpu_monitoring_thread = Thread(target=self.gather_cpu_stats)
         self.cpu_monitoring_thread.start()
-        self.transcription_thread = Thread(target=self.transcribe_job)
+        self.work_thread = Thread(target=self.solve)
 
     def establish_connection(self):
         context = zmq.Context()
@@ -47,22 +49,25 @@ class Worker():
             self.process_incoming_data(self, incoming)
 
             if (len(self.completed_jobs) > 0):
-                if (self.cpu_data is not None and self.skips < SKIP_LIMIT):
+                if (self.cpu_data != None and self.skips < SKIP_LIMIT):
                     self.connection.send_json({'test': 1}) # take from completed jobs
                     skips += 1
                 else:
                     skips = 0
                     self.connection.send_json({self.name: {'average_cpu': self.cpu_data}})
             else:
-                if (self.cpu_data is not None): # send CPU data
+                if (self.cpu_data != None): # send CPU data
                     self.connection.send_json({self.name: {'average_cpu': self.cpu_data}})
                 else:
                     self.connection.send_json({}) # no data to send
 
-    def process_incoming_data(self):
-        pass
+    def process_incoming_data(self, task):
+        if (task['job']['priority'] == 1):
+            self.priority_queue.append(task)
+        else:
+            self.work_queue.append(task)
 
-    def dispatch(self):
+    def dispatch(self, task):
         pass
 
     def gather_cpu_stats(self):
@@ -73,39 +78,28 @@ class Worker():
     Dequeue from the jobs queue and follow instructions.
     '''
     def solve(self):
-        pass
+        subs = SubsAI()
+        # model = subs.create_model('ggerganov/whisper.cpp', {'model_type':'tiny', 'device':'cpu', 'language': ''})
 
-# from subsai import SubsAI
-# from subsai import Tools
-# import pysubs2
+        while True:
+            if (self.priority_queue > 0):
+                temp_discriminator = str(random.randint(1,100000))
+                temp_file = open(temp_discriminator + '-temp.mp3', 'wb')
+                task = self.priority_queue.pop(0)
+                file = temp_file.write(task['job']['encoded_media']) # decode from B64 and write to file
+                temp_file.close()
 
-# print('test')
-# file = 'test.mp3'
-# subs = SubsAI()
-# model = subs.create_model('ggerganov/whisper.cpp', {'model_type':'tiny'})
-# output = subs.transcribe(file, model)
-# output.save('goomba2.srt')
+                model = subs.create_model('ggerganov/whisper.cpp', {'model_type':'tiny', 'device':'cpu', 'language': task['job']['original_language']})
+                transcript = model.transcribe(file, model)
+                transcript.save(str(temp_discriminator + '.srt'))
 
-# subtitles = pysubs2.load('goomba2.srt')
-# translated_subs = Tools.translate(subtitles, source_language='English', target_language='Croatian', model='facebook/m2m100_1.2B')
-# translated_subs.save('translated.srt')
+                # now, encode transcript, repackage in task
+                
 
-'''
-# worker node sample
-import time
-import zmq
+                # did the user want translation? if not, dispatch
 
-port = 9091
-
-context = zmq.Context()
-socket = context.socket(zmq.PAIR)
-socket.bind("tcp://*:%s" % port)
-socket.recv()
-
-while True:
-    socket.send(b"payload from server: [ip]")
-    msg = socket.recv()
-    print(msg)
-    time.sleep(5)
-
-'''
+            elif (self.work_queue > 0):
+                pass
+            else:
+                time.sleep(1)
+                continue
