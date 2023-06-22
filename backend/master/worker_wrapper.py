@@ -14,7 +14,7 @@ class Worker():
         self.lb = lb
         self.name = name
         self.ip = ip
-        self.jobs = jobs # jobs currently being processed by the remote worker.
+        # self.jobs = jobs # jobs currently being processed by the remote worker.
         self.cpu_trend = cpu_trend
         self.usage_data = usage_data
         self.connection = None
