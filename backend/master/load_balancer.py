@@ -6,7 +6,7 @@ from worker_wrapper import Worker
 
 class LoadBalancer():
 
-    TRANSMISSION_DELAY = 1 # number of seconds between data transmissions between worker and wrapper.
+    TRANSMISSION_DELAY = 3 # number of seconds between data transmissions between worker and wrapper.
     
     def __init__(self, instance) -> None:
         self.master_instance = instance

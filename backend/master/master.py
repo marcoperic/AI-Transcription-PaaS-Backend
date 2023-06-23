@@ -67,5 +67,7 @@ class Master():
 
 if __name__ == "__main__":
     m = Master()
-    m.lb.add_worker('goober', '192.192.192.100')
-    # m.enqueue({})
+    m.lb.add_worker('worker-01', 'localhost')
+    fp = open('testing/sample_instructions_package.json')
+    x = json.load(fp)
+    m.enqueue(x)

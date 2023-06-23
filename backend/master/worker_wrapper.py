@@ -5,6 +5,7 @@ A wrapper class to store statistics and maintain a connection with the remote wo
 from threading import Thread
 import zmq
 import time
+import json
 
 PORT = '9091'
 
@@ -14,7 +15,7 @@ class Worker():
         self.lb = lb
         self.name = name
         self.ip = ip
-        # self.jobs = jobs # jobs currently being processed by the remote worker.
+        self.jobs = jobs
         self.cpu_trend = cpu_trend
         self.usage_data = usage_data
         self.connection = None
@@ -35,11 +36,12 @@ class Worker():
         context = zmq.Context()
         print('worker ' + self.name + ' attempting connection to ' + self.ip)
         self.connection = context.socket(zmq.PAIR)
-        self.connection.connect("tcp://localhost:%s" % PORT)
+        self.connection.connect(str("tcp://" + self.ip + ":" + PORT))
         print(self.name + ' successfully connected to ' + self.ip)
         self.connection.send_json({'test': 1})
 
         self.data_transfer_thread = Thread(target=self.data_transfer)
+        print('starting data transfer thread')
         self.data_transfer_thread.start()
 
     '''
@@ -53,7 +55,7 @@ class Worker():
             # self.process_worker_response(self, msg)
 
             if (len(self.jobs) > 0):
-                self.connection.send_json({'test':1})
+                self.connection.send_json(self.jobs.pop(0))
             else:
                 self.connection.send_json({}) # code to the worker that there are no new jobs.
             time.sleep(self.lb.TRANSMISSION_DELAY)
