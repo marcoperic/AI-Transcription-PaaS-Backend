@@ -15,9 +15,9 @@ class LoadBalancer():
     '''
     Add a worker to the list of active workers
     '''
-    def add_worker(self, name, ip):
+    def add_worker(self, name, ip, port):
         print('adding worker')
-        self.active_workers.append(Worker(self, name, ip, [], 0, []))
+        self.active_workers.append(Worker(self, name, ip, port, [], 0, []))
 
     '''
     Output the list of workers

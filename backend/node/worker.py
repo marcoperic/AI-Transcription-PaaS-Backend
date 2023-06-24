@@ -1,3 +1,7 @@
+'''
+Worker node class. Accepts incoming connections from master's worker wrapper and completes tasks.
+'''
+
 import time
 import zmq
 import urllib.request
@@ -38,6 +42,9 @@ class Worker():
         self.work_thread = Thread(target=self.process_job)
         self.work_thread.start()
 
+    '''
+    Allow incoming connection from master's worker_wrapper
+    '''
     def establish_connection(self):
         print('initializing connection')
         context = zmq.Context()
@@ -49,6 +56,9 @@ class Worker():
         self.data_transfer_thread = Thread(target=self.data_transfer)
         self.data_transfer_thread.start()
 
+    '''
+    Transfer data to master's worker_wrapper
+    '''
     def data_transfer(self):
         while True:
             print('data transfer top of loop')
@@ -57,9 +67,7 @@ class Worker():
             self.process_incoming_data(incoming)
 
             if (len(self.completed_jobs) > 0):
-                    retval = self.completed_jobs.pop(0)
-                    # print(json.dumps(dict(retval)))
-                    self.connection.send_json(retval) # take from completed jobs
+                    self.connection.send_json(self.completed_jobs.pop(0)) # take from completed jobs
             else:
                 if (self.cpu_data != None): # send CPU data
                     self.connection.send_json({self.name: {'average_cpu': self.cpu_data}})
@@ -69,6 +77,9 @@ class Worker():
 
             time.sleep(0.5) # may cause timing problems with other socket? verify no problems here. 
 
+    '''
+    Processes data sent from the worker wrapper. Accomodates priority queue.
+    '''
     def process_incoming_data(self, task):
 
         if (task == {}):
@@ -79,9 +90,15 @@ class Worker():
         else:
             self.work_queue.append(task)
 
+    '''
+    Put the completed transcription/translation job in the 
+    '''
     def dispatch(self, task):
         self.completed_jobs.append(task)
 
+    '''
+    Collect statistics about CPU utilization and send it to the worker_wrapper
+    '''
     def gather_cpu_stats(self):
         # Calling psutil.cpu_precent() for 10 seconds
         while True:
@@ -107,6 +124,9 @@ class Worker():
                 time.sleep(1)
                 continue
     
+    '''
+    Handles the transcription and translation workflow and sends it to dispatch()
+    '''
     def transcribe_and_translate(self, task, subs):
         temp_discriminator = str(random.randint(1,100000))
         temp_file = open(str(temp_discriminator + '-temp.mp3'), 'wb')
@@ -131,7 +151,7 @@ class Worker():
             with open('temp-translated.srt', 'rb') as translation:
                 encoded_translation = base64.b64encode(translation.read())
             
-            task['job']['encoded_translation'] = encoded_translation
+            task['job']['encoded_translation'] = str(encoded_translation)
             self.dispatch(task)
             print('transcription complete!')
             os.remove(str(temp_discriminator + '.srt'))
@@ -139,5 +159,7 @@ class Worker():
             self.dispatch(task)
 
         os.remove(str(temp_discriminator + '-temp.mp3'))
+        os.remove(str('temp-translated.srt'))
 
-Worker('worker-01')
+if __name__ == "main":
+    Worker('worker-01')

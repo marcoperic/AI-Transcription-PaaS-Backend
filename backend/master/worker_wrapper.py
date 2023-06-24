@@ -7,11 +7,9 @@ import zmq
 import time
 import json
 
-PORT = '9091'
-
 class Worker():
 
-    def __init__(self, lb, name, ip, jobs, cpu_trend, usage_data) -> None:
+    def __init__(self, lb, name, ip, port, jobs, cpu_trend, usage_data) -> None:
         self.lb = lb
         self.name = name
         self.ip = ip
@@ -20,6 +18,7 @@ class Worker():
         self.usage_data = usage_data
         self.connection = None
         self.extended = False # worker uses a better model that is more suited for foreign languages
+        self.port = port
 
         # establish a connection with the remote worker.
         # TODO: handle the exceptions for when connection fails, etc
@@ -36,7 +35,7 @@ class Worker():
         context = zmq.Context()
         print('worker ' + self.name + ' attempting connection to ' + self.ip)
         self.connection = context.socket(zmq.PAIR)
-        self.connection.connect(str("tcp://" + self.ip + ":" + PORT))
+        self.connection.connect(str("tcp://" + self.ip + ":" + self.port))
         print(self.name + ' successfully connected to ' + self.ip)
         self.connection.send_json({'test': 1})
 
@@ -52,7 +51,7 @@ class Worker():
         while True:
             msg = self.connection.recv_json() # response from worker
             print(msg)
-            # self.process_worker_response(self, msg)
+            self.process_worker_response(self, msg)
 
             if (len(self.jobs) > 0):
                 self.connection.send_json(self.jobs.pop(0))

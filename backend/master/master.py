@@ -1,3 +1,7 @@
+'''
+Master class that receives data and dispatches across multiple worker nodes for processing.
+'''
+
 from load_balancer import LoadBalancer
 from threading import Thread
 from utils import extract_audio
@@ -7,10 +11,6 @@ import os
 
 MEDIA_DIR = 'backend/master/media/'
 
-'''
-Master class that receives data and dispatches 
-across multiple worker nodes for processing.
-'''
 class Master():
     
     def __init__(self) -> None:
@@ -26,7 +26,6 @@ class Master():
         self.dispatch_thread.start()
 
     '''
-    :CALLED BY API:
     Add file and its instructions into the dispatch queue. Instruction file and media file are of the same name.
     Keys in the JSON file include: file size, extension, original language, target language
     '''
@@ -65,9 +64,10 @@ class Master():
     def remove_worker(self, name):
         self.lb.master_remove_worker(name)
 
+# default port is 9091
 if __name__ == "__main__":
     m = Master()
-    m.lb.add_worker('worker-01', 'localhost')
+    m.lb.add_worker('worker-01', 'localhost', 9091)
     fp = open('testing/sample_instructions_package.json')
     x = json.load(fp)
     m.enqueue(x)
