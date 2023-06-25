@@ -21,3 +21,5 @@ app.get('/upload_media', (req, res) => {
 })
 
 app.listen(3000, () => console.log("Server is listening on port 3000."))
+
+// start master.py as well. may be ncessary to allow for routing to multiple masters?
