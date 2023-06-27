@@ -42,7 +42,8 @@ class LoadBalancer():
     Function called by the worker to send a job back to the master.
     '''
     def receive_job(self, job):
-        self.master_instance.receive_worker_data(job)
+        user = str(job['job']['userID'])
+        self.master_instance.users_waiting[user] = job
 
     '''
     Function called by the master to remove a worker. Allows for graceful connection termination?
