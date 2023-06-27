@@ -150,7 +150,7 @@ class Worker():
             with open('temp-translated.srt', 'rb') as translation:
                 encoded_translation = base64.b64encode(translation.read())
             
-            task['job']['encoded_translation'] = str(encoded_translation)
+            task['job']['encoded_translation'] = encoded_translation.decode('utf-8')
             self.dispatch(task)
             print('transcription complete!')
             os.remove(str(temp_discriminator + '.srt'))
@@ -158,6 +158,6 @@ class Worker():
             self.dispatch(task)
 
         os.remove(str(temp_discriminator + '-temp.mp3'))
-        os.remove(str(temp_discriminator + '.srt'))
+        # os.remove(str(temp_discriminator + '.srt'))
 
 Worker('worker-01')

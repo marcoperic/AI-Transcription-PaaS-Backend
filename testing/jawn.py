@@ -31,3 +31,8 @@ import base64
 # output = open('out.txt', 'wb')
 # output.write(encoding)
 # output.close()
+
+# output = open('xyz.srt', 'wb')
+# decoded = base64.b64decode('MQ0KMDA6MDA6MDAsMDAwIC0tPiAwMDowMDoxNywxODANCk1hbCBpcyBzb21lYm9keSDrjZTruJQgcG9ydGENCg0K')
+# output.write(decoded)
+# output.close()
