@@ -1,6 +1,7 @@
 {
-    "worker_name":
+    "cpu_data": 
     {
-        "average_cpu": 0
+        "worker_name": "", 
+        "average_cpu": ""
     }
 }
