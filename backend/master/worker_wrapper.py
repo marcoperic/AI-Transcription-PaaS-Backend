@@ -51,7 +51,7 @@ class Worker():
         while True:
             msg = self.connection.recv_json() # response from worker
             print(msg)
-            self.process_worker_response(self, msg)
+            self.process_worker_response(msg)
 
             if (len(self.jobs) > 0):
                 self.connection.send_json(self.jobs.pop(0))
@@ -65,7 +65,12 @@ class Worker():
     TODO: BE SURE TO REMOVE JOB FROM QUEUE WHEN RESPONSE IS GIVEN
     '''
     def process_worker_response(self, response):
-        if ('worker_name' in response):
+        print('response received:' + str(response))
+        if (response == {}):
+            return None
+
+        if ('cpu_data' in response):
+            print('received cpu data')
             self.update_cpu_stats(response)
             return 1
         else:
@@ -83,7 +88,7 @@ class Worker():
     '''
     def update_cpu_stats(self, data):
         if (len(self.usage_data) < 100):
-            self.usage_data.append(data)
+            self.usage_data.append(data['cpu_data']['average_cpu'])
             self.cpu_trend = sum(self.usage_data) / len(self.usage_data)
         else:
             self.usage_data.pop(0)

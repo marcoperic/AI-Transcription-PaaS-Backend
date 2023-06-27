@@ -29,7 +29,6 @@ class Worker():
         self.connection = None
         self.cpu_data = None
         self.skips = 0 # number of times to skip the CPU data transmission before sending
-
         try:
             self.connection_thread = Thread(target=self.establish_connection)
             self.connection_thread.start()
@@ -70,7 +69,7 @@ class Worker():
                     self.connection.send_json(self.completed_jobs.pop(0)) # take from completed jobs
             else:
                 if (self.cpu_data != None): # send CPU data
-                    self.connection.send_json({self.name: {'average_cpu': self.cpu_data}})
+                    self.connection.send_json({'cpu_data': {'worker_name': self.name, 'average_cpu': self.cpu_data}})
                     self.cpu_data = None
                 else:
                     self.connection.send_json({}) # no data to send
@@ -102,7 +101,7 @@ class Worker():
     def gather_cpu_stats(self):
         # Calling psutil.cpu_precent() for 10 seconds
         while True:
-            self.cpu_data = psutil.cpu_percent(10)
+            self.cpu_data = psutil.cpu_percent(3)
             # print('The CPU usage is: ', psutil.cpu_percent(10))
 
     '''
@@ -161,5 +160,5 @@ class Worker():
         os.remove(str(temp_discriminator + '-temp.mp3'))
         os.remove(str('temp-translated.srt'))
 
-if __name__ == "main":
-    Worker('worker-01')
+
+Worker('worker-01')
