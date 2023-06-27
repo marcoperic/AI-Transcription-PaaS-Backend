@@ -1,7 +1,7 @@
 '''
 Master class that receives data and dispatches across multiple worker nodes for processing.
 '''
-
+from flask import Flask, request
 from load_balancer import LoadBalancer
 from threading import Thread
 from utils import extract_audio
@@ -10,6 +10,20 @@ import json
 import os
 
 MEDIA_DIR = 'backend/master/media/'
+app = Flask(__name__)
+
+# http://localhost:3000/testing
+@app.route('/testing', methods=['GET'])
+def index():
+    return "Hello"
+
+'''
+C:\Users\Marco\Documents\GitHub\AI-Transcription-PaaS-Backend\testing>curl -X POST -H "Content-Type: application/json" -d @sample_instructions_package.json http://localhost:3000/upload_media
+'''
+@app.route('/upload_media', methods=['POST'])
+def upload():
+    print(request.get_json())
+    return "upload successful"
 
 class Master():
     
@@ -64,10 +78,10 @@ class Master():
     def remove_worker(self, name):
         self.lb.master_remove_worker(name)
 
-# default port is 9091
 if __name__ == "__main__":
     m = Master()
-    m.lb.add_worker('worker-01', 'localhost', 9091)
-    fp = open('testing/sample_instructions_package.json')
-    x = json.load(fp)
-    m.enqueue(x)
+    m.lb.add_worker('worker-01', 'localhost', 9091) # default port is 9091
+    # fp = open('testing/sample_instructions_package.json')
+    # x = json.load(fp)
+    # m.enqueue(x)
+    app.run(host='0.0.0.0', port=3000)

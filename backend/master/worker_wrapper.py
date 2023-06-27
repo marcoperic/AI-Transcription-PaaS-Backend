@@ -35,7 +35,7 @@ class Worker():
         context = zmq.Context()
         print('worker ' + self.name + ' attempting connection to ' + self.ip)
         self.connection = context.socket(zmq.PAIR)
-        self.connection.connect(str("tcp://" + self.ip + ":" + self.port))
+        self.connection.connect(str("tcp://" + self.ip + ":" + str(self.port)))
         print(self.name + ' successfully connected to ' + self.ip)
         self.connection.send_json({'test': 1})
 
