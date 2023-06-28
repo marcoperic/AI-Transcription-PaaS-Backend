@@ -20,10 +20,26 @@ class LoadBalancer():
         self.active_workers.append(Worker(self, name, ip, port, [], 0, []))
 
     '''
-    Output the list of workers
+    Prints the worker information to console
     '''
     def print_worker_information(self):
         print(self.active_workers)
+
+    '''
+    Returns a list of all active workers
+    '''
+    def get_worker_information(self):
+        return self.active_workers
+
+    '''
+    Returns a specific worker, found by name or IP
+    '''
+    def get_worker_information(self, name, ip):
+        for worker in self.active_workers:
+            if (name == worker.name):
+                return worker
+        
+        return None
 
     '''
     Checks the list of active workers to see which workers are under the most load.

@@ -86,10 +86,29 @@ def add_worker():
     key = request.args.get('key')
     
     if (key != 'd00d37d8'):
-        return 'authentication unsuccessful'
+        return 'authentification unsuccessful'
     
+    # check that worker with the same name does not already exist
+    check = m.lb.get_worker_information('worker-01', 'localhost')
+
+    if (check != None):
+        return 'worker already exists'
+
     m.lb.add_worker(name, ip, int(port))
-    return 'succesfully added worker!'
+    return 'successfully added worker!'
+
+@app.route('/get_worker_stats', methods=['GET'])
+def get_stats():
+    worker_name = request.args.get('name')
+    ip = request.args.get('ip')
+    key = request.args.get('key')
+
+    if (key != 'd00d37d8'):
+            return 'authentification unsuccessful'
+    
+    print(m.lb.get_worker_information(worker_name, ip).cpu_trend)
+    
+    return 'success!'
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=3000)

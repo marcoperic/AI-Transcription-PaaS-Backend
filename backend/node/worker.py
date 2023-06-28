@@ -12,11 +12,9 @@ from subsai import Tools
 import pysubs2
 import random
 import base64
-import json
 import os
 
 PORT = '9091'
-SKIP_LIMIT = 5
 
 class Worker():
 
