@@ -156,6 +156,6 @@ class Worker():
             self.dispatch(task)
 
         os.remove(str(temp_discriminator + '-temp.mp3'))
-        # os.remove(str(temp_discriminator + '.srt'))
+        os.remove(str(temp_discriminator + '.srt'))
 
 Worker('worker-01')

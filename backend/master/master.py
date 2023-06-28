@@ -97,6 +97,7 @@ def add_worker():
     m.lb.add_worker(name, ip, int(port))
     return 'successfully added worker!'
 
+# http://localhost:3000/get_worker_stats?name=worker-01&ip=localhost&key=d00d37d8
 @app.route('/get_worker_stats', methods=['GET'])
 def get_stats():
     worker_name = request.args.get('name')
