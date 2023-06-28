@@ -25,8 +25,7 @@ class Master():
         self.dispatch_thread.start()
 
     '''
-    Add file and its instructions into the dispatch queue. Instruction file and media file are of the same name.
-    Keys in the JSON file include: file size, extension, original language, target language
+    Add file into dispatch queue. 
     '''
     async def enqueue(self, instructions):
         userID = instructions['job']['userID']
@@ -63,27 +62,34 @@ class Master():
         self.lb.master_remove_worker(name)
 
 m = Master()
-m.lb.add_worker('worker-01', 'localhost', 9091)
+# m.lb.add_worker('worker-01', 'localhost', 9091)
 
 # http://localhost:3000/testing
 @app.route('/testing', methods=['GET'])
 def index():
     return "Hello"
 
-
 # C:\Users\Marco\Documents\GitHub\AI-Transcription-PaaS-Backend\testing>curl -X POST -H "Content-Type: application/json" -d @sample_instructions_package.json http://localhost:3000/upload_media
-
 @app.route('/upload_media', methods=['POST'])
 async def upload():
-    # print(request.get_json())
     json = request.get_json()
     json_retval = await m.enqueue(json)
     print('response from async worker nodes ... great!')
     return json_retval
 
+# http://localhost:3000/add_worker?name=worker-01&ip=localhost&port=9091&key=d00d37d8
+@app.route('/add_worker', methods=['GET'])
+def add_worker():
+    name = request.args.get('name')
+    ip = request.args.get('ip')
+    port = request.args.get('port')
+    key = request.args.get('key')
+    
+    if (key != 'd00d37d8'):
+        return 'authentication unsuccessful'
+    
+    m.lb.add_worker(name, ip, int(port))
+    return 'succesfully added worker!'
+
 if __name__ == "__main__":
-    # m.lb.add_worker('worker-01', 'localhost', 9091) # default port is 9091
-    # fp = open('testing/sample_instructions_package.json')
-    # x = json.load(fp)
-    # m.enqueue(x)
     app.run(host='0.0.0.0', port=3000)
