@@ -96,7 +96,7 @@ def add_worker():
     return 'successfully added worker!'
 
 # http://localhost:3000/remove_worker?name=worker-01&ip=localhost&key=d00d37d8
-@app.route('remove_worker', methods=['GET'])
+@app.route('/remove_worker', methods=['GET'])
 def remove_worker():
     name = request.args.get('name')
     ip = request.args.get('ip')
