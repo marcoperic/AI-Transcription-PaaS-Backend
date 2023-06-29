@@ -32,9 +32,9 @@ class LoadBalancer():
         return self.active_workers
 
     '''
-    Returns a specific worker, found by name or IP
+    Returns a specific worker, found by name or IP. Returns None if worker does not exist.
     '''
-    def get_worker_information(self, name, ip):
+    def find_worker(self, name, ip):
         for worker in self.active_workers:
             if (name == worker.name):
                 return worker
@@ -70,6 +70,9 @@ class LoadBalancer():
             if worker.name == name:
                 worker.terminate_connection()
                 worker.destroy()
+                return 1
+            
+        return None
 
     '''
     To be called by Worker class when exceptions or thrown or connection is closed

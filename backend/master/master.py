@@ -89,13 +89,27 @@ def add_worker():
         return 'authentification unsuccessful'
     
     # check that worker with the same name does not already exist
-    check = m.lb.get_worker_information('worker-01', 'localhost')
-
-    if (check != None):
+    if (m.lb.find_worker('worker-01', 'localhost') != None):
         return 'worker already exists'
 
     m.lb.add_worker(name, ip, int(port))
     return 'successfully added worker!'
+
+# http://localhost:3000/remove_worker?name=worker-01&ip=localhost&key=d00d37d8
+@app.route('remove_worker', methods=['GET'])
+def remove_worker():
+    name = request.args.get('name')
+    ip = request.args.get('ip')
+    port = request.args.get('port')
+    key = request.args.get('key')
+
+    if (key != 'd00d37d8'):
+        return 'authentification unsuccessful'
+    
+    if (m.lb.master_remove_worker == 1):
+        return 'worker succcessfully removed'
+    elif (m.lb.master_remove_worker == None):
+        return 'error: does the worker exist?'
 
 # http://localhost:3000/get_worker_stats?name=worker-01&ip=localhost&key=d00d37d8
 @app.route('/get_worker_stats', methods=['GET'])
@@ -107,7 +121,7 @@ def get_stats():
     if (key != 'd00d37d8'):
             return 'authentification unsuccessful'
     
-    print(m.lb.get_worker_information(worker_name, ip).cpu_trend)
+    print(m.lb.find_worker(worker_name, ip).cpu_trend)
     
     return 'success!'
 
