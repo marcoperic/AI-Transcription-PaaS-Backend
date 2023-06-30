@@ -46,7 +46,7 @@ class Worker():
         print('initializing connection')
         context = zmq.Context()
         self.connection = context.socket(zmq.PAIR)
-        self.connection.bind('tcp://*:%s' % PORT)
+        self.connection.bind('tcp://0.0.0.0:%s' % PORT)
         self.connection.recv()
         self.connection.send_json({})
         print('connection received! starting data transfer thread')
