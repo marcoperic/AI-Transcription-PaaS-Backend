@@ -30,4 +30,4 @@ RUN pip3 install -r requirements.txt
 
 WORKDIR backend/node/
 
-CMD ["python", "worker.py"]
+CMD ["python3", "worker.py"]
