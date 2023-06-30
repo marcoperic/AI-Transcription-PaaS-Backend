@@ -6,6 +6,7 @@ import time
 import zmq
 import urllib.request
 import psutil
+import time
 from threading import Thread
 from subsai import SubsAI
 from subsai import Tools
@@ -15,6 +16,8 @@ import base64
 import os
 
 PORT = '9091'
+subs = SubsAI()
+model = subs.create_model('guillaumekln/faster-whisper', {'model_type':'small', 'device':'cpu'})
 
 class Worker():
 
@@ -106,17 +109,14 @@ class Worker():
     Dequeue from the jobs queue and follow instructions.
     '''
     def process_job(self):
-        subs = SubsAI()
-        # model = subs.create_model('ggerganov/whisper.cpp', {'model_type':'tiny', 'device':'cpu', 'language': ''})
-
         while True:
             if (len(self.priority_queue) > 0):
                 task = self.priority_queue.pop(0)
-                self.transcribe_and_translate(task, subs)
+                self.transcribe_and_translate(task)
 
             elif (len(self.work_queue) > 0):
                 task = self.work_queue.pop(0)
-                self.transcribe_and_translate(task, subs)
+                self.transcribe_and_translate(task)
             else:
                 time.sleep(1)
                 continue
@@ -124,13 +124,18 @@ class Worker():
     '''
     Handles the transcription and translation workflow and sends it to dispatch()
     '''
-    def transcribe_and_translate(self, task, subs):
+    def transcribe_and_translate(self, task):
+        # language = task['job']['original_language']
+        # print('language: ' + language)
+        # if (language != 'en'):
+        #     model = subs.create_model('guillaumekln/faster-whisper', {'model_type':'small', 'device':'cpu', 'language': language})
+
+        now = time.time() * 1000
         temp_discriminator = str(random.randint(1,100000))
         temp_file = open(str(temp_discriminator + '-temp.mp3'), 'wb')
         temp_file.write(base64.b64decode(task['job']['encoded_media'])) # decode from B64 and write to file
         temp_file.close()
 
-        model = subs.create_model('ggerganov/whisper.cpp', {'model_type':'tiny', 'device':'cpu', 'language': task['job']['original_language']})
         transcript = subs.transcribe(str(temp_discriminator + '-temp.mp3'), model)
         transcript.save(str(temp_discriminator + '.srt'))
 
@@ -157,5 +162,6 @@ class Worker():
 
         os.remove(str(temp_discriminator + '-temp.mp3'))
         os.remove(str(temp_discriminator + '.srt'))
+        print('all done! elapsed time: ' + str((time.time()*1000) - now) + 'ms')
 
 Worker('worker-01')

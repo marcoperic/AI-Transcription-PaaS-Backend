@@ -16,7 +16,7 @@ from pywhispercpp.model import Model
 file = 'test.mp3'
 subs = SubsAI()
 print(subs.available_models())
-model = subs.create_model('guillaumekln/faster-whisper', {'model_type':'tiny', 'device':'cpu', 'language': 'hr'})
+model = subs.create_model('guillaumekln/faster-whisper', {'model_type':'base', 'device':'cpu'})
 output = subs.transcribe(file, model)
 output.save('multiple_language_transcription.srt')
 print(datetime.now())
