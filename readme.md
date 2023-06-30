@@ -27,12 +27,17 @@ Parallel processing practices will be employed to:
 
 # Notes about Models
 
-ggerganov/whisper.cpp is great for English, but guillaumekln/faster-whisper and linto-ai/whisper-timestamped perform better with foreign languages. 
-
-As such, it may be necessary in the future to deploy workers that are 'extended,' meaning that they can process a wider variety of languages. 
-
-English and common language inference can be done with 'tiny' or 'base,' model size but foreign should be done on 'small' or higher.
-
-More testing will need to be done on which languages are most accurate.
+guillaumekln/faster-whisper is the default model for all transcription needs. 
+performance is great. 
 
 Use https://gist.github.com/carlopires/1262033/c52ef0f7ce4f58108619508308372edd8d0bd518 for country codes.
+
+TODO: Complete testing with the load balancer and multiple workers. Slower inference speed is acceptable when there are more workers to balance the load.
+
+## BENCHMARKS
+
+### Small model size
+16GB RAM 3CPUS: 3500ms (4.28x) accuracy: ?
+6GB RAM 2CPUS: 4800ms (3.06x) accuracy: ?
+
+### Base model size

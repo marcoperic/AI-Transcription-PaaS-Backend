@@ -52,7 +52,6 @@ class Worker():
         self.connection.bind('tcp://0.0.0.0:%s' % PORT)
         self.connection.recv()
         self.connection.send_json({})
-        print('connection received! starting data transfer thread')
         self.data_transfer_thread = Thread(target=self.data_transfer)
         self.data_transfer_thread.start()
 
