@@ -6,7 +6,6 @@ from load_balancer import LoadBalancer
 from threading import Thread
 import time
 
-MEDIA_DIR = 'backend/master/media/'
 app = Flask(__name__)
 
 class Master():

@@ -13,13 +13,13 @@ from pywhispercpp.model import Model
 
 
 # print(datetime.now())
-file = 'test.mp3'
-subs = SubsAI()
-print(subs.available_models())
-model = subs.create_model('guillaumekln/faster-whisper', {'model_type':'base', 'device':'cpu'})
-output = subs.transcribe(file, model)
-output.save('multiple_language_transcription.srt')
-print(datetime.now())
+# file = 'test.mp3'
+# subs = SubsAI()
+# print(subs.available_models())
+# model = subs.create_model('guillaumekln/faster-whisper', {'model_type':'base', 'device':'cpu'})
+# output = subs.transcribe(file, model)
+# output.save('multiple_language_transcription.srt')
+# print(datetime.now())
 
 
 # subtitles = pysubs2.load('goomba2.srt')
@@ -27,12 +27,12 @@ print(datetime.now())
 # translated_subs.save('translated.srt')
 
 
-# with open('test.mp3', 'rb') as file:
-#     encoding = base64.b64encode(file.read())
+with open('medium_test.mp3', 'rb') as file:
+    encoding = base64.b64encode(file.read())
 
-# output = open('out.txt', 'wb')
-# output.write(encoding)
-# output.close()
+output = open('out.txt', 'wb')
+output.write(encoding)
+output.close()
 
 # output = open('xyz.srt', 'wb')
 # decoded = base64.b64decode('MQ0KMDA6MDA6MDAsMDAwIC0tPiAwMDowMDoxNywxODANCk1hbCBpcyBzb21lYm9keSDrjZTruJQgcG9ydGENCg0K')

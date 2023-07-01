@@ -17,10 +17,9 @@ class Worker():
         self.cpu_trend = cpu_trend
         self.usage_data = usage_data
         self.connection = None
-        self.extended = False # worker uses a better model that is more suited for foreign languages
+        self.extended = False
         self.port = port
 
-        # establish a connection with the remote worker.
         # TODO: handle the exceptions for when connection fails, etc
         try:
             self.connection_thread = Thread(target=self.establish_connection)
