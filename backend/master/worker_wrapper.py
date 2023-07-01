@@ -92,7 +92,7 @@ class Worker():
             self.cpu_trend = sum(self.usage_data) / len(self.usage_data)
         else:
             self.usage_data.pop(0)
-            self.usage_data.append(data)
+            self.usage_data.append(data['cpu_data']['average_cpu'])
             self.cpu_trend = sum(self.usage_data) / 100
 
     '''

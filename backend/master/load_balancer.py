@@ -51,6 +51,7 @@ class LoadBalancer():
             raise Exception("Cannot assign job. No active workers.")
         else:
             self.active_workers.sort(key=lambda x: x.cpu_trend) # sorts in ascending order, cpu load trend
+            print('workers sorted by cpu_trend:' + str(self.active_workers))
             selection = self.active_workers[0]
             selection.enqueue_job(job)
 

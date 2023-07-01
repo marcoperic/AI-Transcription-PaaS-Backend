@@ -29,7 +29,6 @@ class Worker():
         self.completed_jobs = []
         self.connection = None
         self.cpu_data = None
-        self.skips = 0 # number of times to skip the CPU data transmission before sending
         try:
             self.connection_thread = Thread(target=self.establish_connection)
             self.connection_thread.start()
@@ -69,7 +68,7 @@ class Worker():
                     self.connection.send_json(self.completed_jobs.pop(0)) # take from completed jobs
             else:
                 if (self.cpu_data != None): # send CPU data
-                    self.connection.send_json({'cpu_data': {'worker_name': self.name, 'average_cpu': self.cpu_data}})
+                    self.connection.send_json({'cpu_data': {'worker_name': self.ip, 'average_cpu': self.cpu_data}})
                     self.cpu_data = None
                 else:
                     self.connection.send_json({}) # no data to send
@@ -163,4 +162,4 @@ class Worker():
         os.remove(str(temp_discriminator + '.srt'))
         print('all done! elapsed time: ' + str((time.time()*1000) - now) + 'ms')
 
-Worker('worker-01')
+Worker('worker-xx')

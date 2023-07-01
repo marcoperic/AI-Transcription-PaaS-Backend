@@ -36,8 +36,10 @@ TODO: Complete testing with the load balancer and multiple workers. Slower infer
 
 ## BENCHMARKS
 
-### Small model size
+### Small model
+
 16GB RAM 3CPUS: 3500ms (4.28x) accuracy: ?
+
 6GB RAM 2CPUS: 4800ms (3.06x) accuracy: ?
 
-### Base model size
+### Base model

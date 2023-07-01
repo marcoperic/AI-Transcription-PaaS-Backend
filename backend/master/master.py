@@ -89,7 +89,7 @@ def add_worker():
         return 'authentification unsuccessful'
     
     # check that worker with the same name does not already exist
-    if (m.lb.find_worker('worker-01', 'localhost') != None):
+    if (m.lb.find_worker(name, ip) != None):
         return 'worker already exists'
 
     m.lb.add_worker(name, ip, int(port))
