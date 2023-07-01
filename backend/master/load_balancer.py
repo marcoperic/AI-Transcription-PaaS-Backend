@@ -50,10 +50,14 @@ class LoadBalancer():
         if (len(self.active_workers) == 0):
             raise Exception("Cannot assign job. No active workers.")
         else:
-            self.active_workers.sort(key=lambda x: x.cpu_trend) # sorts in ascending order, cpu load trend
-            print('workers sorted by cpu_trend:' + str(self.active_workers))
+            self.active_workers.sort(key=lambda x: len(x.jobs)) #sorts by number of jobs waiting to be transmitted.
             selection = self.active_workers[0]
             selection.enqueue_job(job)
+
+            # self.active_workers.sort(key=lambda x: x.cpu_trend) # sorts in ascending order, cpu load trend
+            # print('workers sorted by cpu_trend:' + str(self.active_workers))
+            # selection = self.active_workers[0]
+            # selection.enqueue_job(job)
 
     '''
     Function called by the worker to send a job back to the master.

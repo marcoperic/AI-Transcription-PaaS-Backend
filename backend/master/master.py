@@ -74,7 +74,6 @@ def index():
 async def upload():
     json = request.get_json()
     json_retval = await m.enqueue(json)
-    print('response from async worker nodes ... great!')
     return json_retval
 
 # http://localhost:3000/add_worker?name=worker-01&ip=localhost&port=9091&key=d00d37d8
