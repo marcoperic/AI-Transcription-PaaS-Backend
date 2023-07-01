@@ -33,6 +33,7 @@ performance is great.
 Use https://gist.github.com/carlopires/1262033/c52ef0f7ce4f58108619508308372edd8d0bd518 for country codes.
 
 TODO: Complete testing with the load balancer and multiple workers. Slower inference speed is acceptable when there are more workers to balance the load.
+TODO: Load balancer should be reconfigured so that the workers with the least jobs are assigned new jobs. CPU load is too inconsistent.
 
 ## BENCHMARKS
 
