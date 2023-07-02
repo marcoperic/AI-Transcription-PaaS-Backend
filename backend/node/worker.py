@@ -16,7 +16,6 @@ import base64
 import sys
 import os
 
-PORT = '9091'
 subs = SubsAI()
 model = subs.create_model('guillaumekln/faster-whisper', {'model_type':'small', 'device':'cpu'})
 
@@ -25,9 +24,10 @@ class Worker():
     def __init__(self, name) -> None:
         if (len(sys.argv) == 1):
             print('no port provided: defaulting to port 9091')
+            self.port = '9091'
         else:
-            PORT = str(sys.argv[1])
-            print('using port: ' + PORT)
+            self.port = str(sys.argv[1])
+            print('using port: ' + self.port)
 
         self.ip = urllib.request.urlopen('https://4.ident.me').read().decode('utf8') #get ipv4 address
         self.name = name
@@ -55,7 +55,7 @@ class Worker():
         print('initializing connection')
         context = zmq.Context()
         self.connection = context.socket(zmq.PAIR)
-        self.connection.bind('tcp://0.0.0.0:%s' % PORT)
+        self.connection.bind('tcp://0.0.0.0:%s' % self.port)
         self.connection.recv()
         self.connection.send_json({})
         self.data_transfer_thread = Thread(target=self.data_transfer)

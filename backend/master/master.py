@@ -90,7 +90,7 @@ def add_worker():
     if (m.lb.find_worker(name, ip) != None):
         return 'worker already exists'
 
-    m.lb.add_worker(name, ip, int(port))
+    m.lb.add_worker(name, ip, port)
     return 'successfully added worker!'
 
 # http://localhost:3000/remove_worker?name=worker-01&ip=localhost&key=d00d37d8
