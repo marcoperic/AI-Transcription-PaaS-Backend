@@ -20,7 +20,7 @@ RUN apt-get clean
 
 RUN rm -rf /var/lib/apt/lists/*
 
-EXPOSE 9091
+EXPOSE 9091-9100
 
 COPY . .
 

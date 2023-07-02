@@ -13,6 +13,7 @@ from subsai import Tools
 import pysubs2
 import random
 import base64
+import sys
 import os
 
 PORT = '9091'
@@ -22,6 +23,12 @@ model = subs.create_model('guillaumekln/faster-whisper', {'model_type':'small', 
 class Worker():
 
     def __init__(self, name) -> None:
+        if (len(sys.argv) == 1):
+            print('no port provided: defaulting to port 9091')
+        else:
+            PORT = str(sys.argv[1])
+            print('using port: ' + PORT)
+
         self.ip = urllib.request.urlopen('https://4.ident.me').read().decode('utf8') #get ipv4 address
         self.name = name
         self.work_queue = []
