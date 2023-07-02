@@ -98,15 +98,14 @@ def add_worker():
 def remove_worker():
     name = request.args.get('name')
     ip = request.args.get('ip')
-    port = request.args.get('port')
     key = request.args.get('key')
 
     if (key != 'd00d37d8'):
         return 'authentification unsuccessful'
     
-    if (m.lb.master_remove_worker == 1):
+    if (m.lb.master_remove_worker(name) == 1):
         return 'worker succcessfully removed'
-    elif (m.lb.master_remove_worker == None):
+    elif (m.lb.master_remove_worker(name) == None):
         return 'error: does the worker exist?'
 
 # http://localhost:3000/get_worker_stats?name=worker-01&ip=localhost&key=d00d37d8
