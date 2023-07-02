@@ -39,6 +39,19 @@ TODO: Load balancer should be reconfigured so that the workers with the least jo
 
 ### Small model
 
+#### Docker Containerized Application
+--------------------
+512MB RAM, 20CPUs: 1800ms
+
+4GB RAM, 20CPUs: 1009ms
+
+12GB RAM, 20CPUs: ~950ms
+
+512MB RAM, 4CPUs: 1800ms
+
+2GB RAM, 4CPUs: 900ms
+
+------------------------------
 16GB RAM 3CPUS: 3500ms (4.28x) accuracy: ?
 
 6GB RAM 2CPUS: 4800ms (3.06x) accuracy: ?
