@@ -6,6 +6,15 @@ import pysubs2
 from datetime import datetime
 from pywhispercpp.model import Model
 
+import moviepy.editor as mp
+
+def extract_audio(file):
+    name = str(file).split('.')[0]
+    print(name)
+    my_clip = mp.VideoFileClip(file)
+    my_clip.audio.write_audiofile(name + '.ogg')
+    return str(name + '.ogg')
+
 # fp = open('docs/sample_instructions.json')
 # x = json.load(fp)
 # x['job']['userID'] = '1231iu23u1231nksajnasd98asnd9'
@@ -26,13 +35,22 @@ from pywhispercpp.model import Model
 # translated_subs = Tools.translate(subtitles, source_language='English', target_language='Croatian', model='facebook/m2m100_1.2B')
 # translated_subs.save('translated.srt')
 
+file = 'serious_mode.mp4'
+extract_audio(file)
 
-with open('medium_test.mp3', 'rb') as file:
+with open('serious_mode.ogg', 'rb') as file:
     encoding = base64.b64encode(file.read())
 
 output = open('out.txt', 'wb')
 output.write(encoding)
 output.close()
+
+# with open('medium_test.mp3', 'rb') as file:
+#     encoding = base64.b64encode(file.read())
+
+# output = open('out.txt', 'wb')
+# output.write(encoding)
+# output.close()
 
 # output = open('xyz.srt', 'wb')
 # decoded = base64.b64decode('MQ0KMDA6MDA6MDAsMDAwIC0tPiAwMDowMDoxNywxODANCk1hbCBpcyBzb21lYm9keSDrjZTruJQgcG9ydGENCg0K')
