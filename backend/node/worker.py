@@ -151,9 +151,9 @@ class Worker():
         task['job']['encoded_transcript'] = str(encoded_transcript.decode())
 
         # did the user want translation? if not, dispatch
-        if (task['job']['target_language'] != ''):
+        if (task['job']['target_language'] != ""):
             subtitles = pysubs2.load(str(temp_discriminator + '.srt'))
-            translated_subs = Tools.translate(subtitles, source_language=task['job']['original_language'], target_language=task['job']['target_language'], model='facebook/m2m100_1.2B')
+            translated_subs = Tools.translate(subtitles, source_language="", target_language=task['job']['target_language'], model='facebook/m2m100_1.2B') # must have source language
             translated_subs.save('temp-translated.srt')
             with open('temp-translated.srt', 'rb') as translation:
                 encoded_translation = base64.b64encode(translation.read())

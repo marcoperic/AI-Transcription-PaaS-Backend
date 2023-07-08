@@ -31,8 +31,7 @@ class Master():
         self.file_queue.append(instructions)
         self.users_waiting[userID] = ''
         while self.users_waiting[userID] == '':
-            print('waiting')
-            time.sleep(1)
+            time.sleep(0.5)
 
         retval = self.users_waiting[userID]
         del self.users_waiting[userID]
