@@ -148,7 +148,7 @@ class Worker():
         with open(str(temp_discriminator + '.srt'), 'rb') as transcript:
             encoded_transcript = base64.b64encode(transcript.read())
         
-        task['job']['encoded_transcript'] = str(encoded_transcript)
+        task['job']['encoded_transcript'] = str(encoded_transcript.decode())
 
         # did the user want translation? if not, dispatch
         if (task['job']['target_language'] != ''):
