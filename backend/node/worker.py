@@ -66,7 +66,7 @@ class Worker():
     '''
     def data_transfer(self):
         while True:
-            print('data transfer top of loop')
+            # print('data transfer top of loop')
             incoming = self.connection.recv_json()
             # print(incoming['job']['original_language'])
             self.process_incoming_data(incoming)

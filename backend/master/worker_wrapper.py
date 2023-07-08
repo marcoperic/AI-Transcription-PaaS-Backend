@@ -64,7 +64,7 @@ class Worker():
     TODO: BE SURE TO REMOVE JOB FROM QUEUE WHEN RESPONSE IS GIVEN
     '''
     def process_worker_response(self, response):
-        print('response received:' + str(response))
+        # print('response received:' + str(response))
         if (response == {}):
             return None
 
