@@ -70,6 +70,10 @@ def index():
 # C:\Users\Marco\Documents\GitHub\AI-Transcription-PaaS-Backend\testing>curl -X POST -H "Content-Type: application/json" -d @sample_instructions_package.json http://localhost:3000/upload_media
 @app.route('/upload_media', methods=['POST'])
 async def upload():
+    auth = request.headers.get("Auth")
+    if (auth != 'B75XE1gGFJ7g'):
+        return {"authentication unsuccessful"}
+
     json = request.get_json()
     json_retval = await m.enqueue(json)
     return json_retval
