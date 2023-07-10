@@ -60,7 +60,6 @@ class Master():
         self.lb.master_remove_worker(name)
 
 m = Master()
-# m.lb.add_worker('worker-01', 'localhost', 9091)
 
 # http://localhost:3000/testing
 @app.route('/testing', methods=['GET'])
