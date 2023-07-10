@@ -20,6 +20,8 @@ RUN apt-get install -y git
 
 RUN apt-get install -y ffmpeg
 
+RUN pip3 install git+https://github.com/abdeladim-s/subsai.git@4cfbda07aad112057304e145d1f11023f3a892c2
+
 RUN apt-get clean
 
 RUN rm -rf /var/lib/apt/lists/*
@@ -27,8 +29,6 @@ RUN rm -rf /var/lib/apt/lists/*
 EXPOSE 9091-9100
 
 ENV PORT=9091
-
-RUN pip3 install git+https://github.com/abdeladim-s/subsai.git@4cfbda07aad112057304e145d1f11023f3a892c2
 
 COPY . .
 
