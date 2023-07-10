@@ -1,6 +1,10 @@
 # syntax=docker/dockerfile:1
 
-FROM python:3.9
+# FROM python:3.9
+
+FROM nvidia/cuda:11.1.1-devel-ubuntu20.04
+
+ENV DEBIAN_FRONTEND=noninteractive 
 
 RUN apt-get update
 
@@ -22,11 +26,11 @@ RUN rm -rf /var/lib/apt/lists/*
 
 EXPOSE 9091-9100
 
-COPY . .
-
 ENV PORT=9091
 
-RUN pip3 install git+https://github.com/abdeladim-s/subsai.git@936aa4fc2093ef1232449012df5b884b54e1f5b6
+RUN pip3 install git+https://github.com/abdeladim-s/subsai.git@4cfbda07aad112057304e145d1f11023f3a892c2
+
+COPY . .
 
 RUN pip3 install -r requirements.txt
 
