@@ -17,7 +17,14 @@ import sys
 import os
 
 subs = SubsAI()
-model = subs.create_model('guillaumekln/faster-whisper', {'model_type':'small', 'device':'cpu'})
+#warmup 
+# subs.create_model('m-bain/whisperX', {'model_type':'medium.en', 'device':'cpu'})
+supported_languages = ['en', 'fr', 'de', 'es', 'it', 'ja', 'zh', 'nl', 'uk', 'pt']
+
+models = {}
+for lang in supported_languages:
+    print('Initializing ' + lang + ' model')
+    models[lang] = subs.create_model('m-bain/whisperX', {'model_type':'small', 'device':'cuda', 'language': lang, 'batch_size': 4})
 
 class Worker():
 
@@ -130,10 +137,8 @@ class Worker():
     Handles the transcription and translation workflow and sends it to dispatch()
     '''
     def transcribe_and_translate(self, task):
-        # language = task['job']['original_language']
-        # print('language: ' + language)
-        # if (language != 'en'):
-        #     model = subs.create_model('guillaumekln/faster-whisper', {'model_type':'small', 'device':'cpu', 'language': language})
+        language = task['job']['original_language']
+        model = models[language]
 
         now = time.time() * 1000
         temp_discriminator = str(random.randint(1,100000))
