@@ -22,7 +22,6 @@ subs = SubsAI()
 # supported_languages = ['en', 'fr', 'de', 'es', 'it', 'ja', 'zh', 'nl', 'uk', 'pt']
 supported_languages = ['en', 'fr', 'es', 'uk']
 
-
 models = {}
 for lang in supported_languages:
     print('Initializing ' + lang + ' model')

@@ -36,4 +36,4 @@ RUN pip3 install -r requirements.txt
 
 WORKDIR backend/node/
 
-CMD python3 -u worker.py $PORT
+CMD python3 -u worker_accelerated.py $PORT
