@@ -15,16 +15,30 @@ class LoadBalancer():
     '''
     Add a worker to the list of active workers
     '''
-    def add_worker(self, name, ip, port):
-        print('adding worker')
-        self.active_workers.append(Worker(self, name, ip, port, [], 0, []))
+    def add_worker(self, name, ip, port, extended):
+        print('adding worker, is extended:' + str(extended))
+        self.active_workers.append(Worker(self, name, ip, port, [], 0, [], extended))
 
     '''
     Prints the worker information to console
     '''
     def print_worker_information(self):
-        print(self.active_workers)
+        info = []
+        for worker in self.active_workers:
+            info.append("[{}]: {}, {}, {}".format(worker.ip, worker.name, worker.port, str(worker.extended)))
 
+        return info
+            
+    '''
+    Used to see whether or not any GPU-accelerated workers are online
+    '''
+    def any_extended_workers(self):
+        for worker in self.active_workers:
+            if (worker.extended == True):
+                return True
+        
+        return False
+    
     '''
     Returns a list of all active workers
     '''

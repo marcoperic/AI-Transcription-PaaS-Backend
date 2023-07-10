@@ -9,7 +9,7 @@ import json
 
 class Worker():
 
-    def __init__(self, lb, name, ip, port, jobs, cpu_trend, usage_data) -> None:
+    def __init__(self, lb, name, ip, port, jobs, cpu_trend, usage_data, extended) -> None:
         self.lb = lb
         self.name = name
         self.ip = ip
@@ -17,7 +17,7 @@ class Worker():
         self.cpu_trend = cpu_trend
         self.usage_data = usage_data
         self.connection = None
-        self.extended = False
+        self.extended = extended
         self.port = port
 
         # TODO: handle the exceptions for when connection fails, etc

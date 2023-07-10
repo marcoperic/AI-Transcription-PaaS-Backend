@@ -77,13 +77,14 @@ async def upload():
     json_retval = await m.enqueue(json)
     return json_retval
 
-# http://localhost:3000/add_worker?name=worker-01&ip=localhost&port=9091&key=d00d37d8
+# http://localhost:3000/add_worker?name=worker-01&ip=localhost&port=9091&gpu=false&key=d00d37d8
 @app.route('/add_worker', methods=['GET'])
 def add_worker():
     name = request.args.get('name')
     ip = request.args.get('ip')
     port = request.args.get('port')
     key = request.args.get('key')
+    extended = (request.args.get('gpu') == 'true')
     
     if (key != 'd00d37d8'):
         return 'authentification unsuccessful'
@@ -92,7 +93,7 @@ def add_worker():
     if (m.lb.find_worker(name, ip) != None):
         return 'worker already exists'
 
-    m.lb.add_worker(name, ip, port)
+    m.lb.add_worker(name, ip, port, extended)
     return 'successfully added worker!'
 
 # http://localhost:3000/remove_worker?name=worker-01&ip=localhost&key=d00d37d8
@@ -111,18 +112,17 @@ def remove_worker():
         return 'error: does the worker exist?'
 
 # http://localhost:3000/get_worker_stats?name=worker-01&ip=localhost&key=d00d37d8
-@app.route('/get_worker_stats', methods=['GET'])
+@app.route('/gpu_available', methods=['GET'])
 def get_stats():
-    worker_name = request.args.get('name')
-    ip = request.args.get('ip')
-    key = request.args.get('key')
+    return str(m.lb.any_extended_workers())
 
+@app.route('/get_worker_info', methods=['GET'])
+def get_info():
+    key = request.args.get('key')
     if (key != 'd00d37d8'):
-            return 'authentification unsuccessful'
-    
-    print(m.lb.find_worker(worker_name, ip).cpu_trend)
-    
-    return 'success!'
+        return 'auth failed'
+
+    return str(m.lb.print_worker_information())
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=3000)
