@@ -21,7 +21,6 @@ class Worker():
         self.port = port
         self.timeout = 0
 
-        # TODO: handle the exceptions for when connection fails, etc
         try:
             self.connection_thread = Thread(target=self.establish_connection)
             self.connection_thread.start()
