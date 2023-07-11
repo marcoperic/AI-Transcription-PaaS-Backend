@@ -57,6 +57,7 @@ class Worker():
         self.connection = context.socket(zmq.PAIR)
         self.connection.bind('tcp://0.0.0.0:%s' % self.port)
         self.connection.recv()
+        print('successfully connected!')
         self.connection.send_json({})
         self.data_transfer_thread = Thread(target=self.data_transfer)
         self.data_transfer_thread.start()

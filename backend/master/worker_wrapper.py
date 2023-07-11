@@ -19,6 +19,7 @@ class Worker():
         self.connection = None
         self.extended = extended
         self.port = port
+        self.timeout = 0
 
         # TODO: handle the exceptions for when connection fails, etc
         try:
@@ -29,6 +30,7 @@ class Worker():
 
         self.data_transfer_thread = None
         self.cpu_stats_thread = Thread(target=self.update_cpu_stats)
+        self.heartbeat_thread = Thread(target=self.heartbeat)
 
     def establish_connection(self): # connect to worker node
         context = zmq.Context()
@@ -41,6 +43,7 @@ class Worker():
         self.data_transfer_thread = Thread(target=self.data_transfer)
         print('starting data transfer thread')
         self.data_transfer_thread.start()
+        self.heartbeat_thread.start()
 
     '''
     The heart of communication between the master and the worker node. Send jobs to the node from the jobs queue.
@@ -49,7 +52,7 @@ class Worker():
     def data_transfer(self):
         while True:
             msg = self.connection.recv_json() # response from worker
-            print(msg)
+            self.timeout = 0 # reset the clock for timeout
             self.process_worker_response(msg)
 
             if (len(self.jobs) > 0):
@@ -103,6 +106,14 @@ class Worker():
         for x in self.jobs:
             if (x['job']['userID'] == job['job']['userID']):
                 self.jobs.remove(x)
+
+    def heartbeat(self):
+        while True and self.timeout < 90:
+            time.sleep(1)
+            self.timeout += 1
+
+        print('Connection with remote worker lost! Terminating connection.')
+        self.lb.master_remove_worker(self.name)        
 
     def terminate_connection(self):
         self.connection.close()
