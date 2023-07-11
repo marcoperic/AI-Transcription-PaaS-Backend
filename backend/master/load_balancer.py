@@ -57,21 +57,24 @@ class LoadBalancer():
 
     '''
     Checks the list of active workers to see which workers are under the most load.
-    Workers under the least amount of load are assigned new jobs.
-    TODO: sort by cpu load trend and by number of jobs in the queue. 
+    Extended workers are given priority and other workers are used as a fallback.
     '''
     def assign_job(self, job):
         if (len(self.active_workers) == 0):
             raise Exception("Cannot assign job. No active workers.")
+        elif (self.any_extended_workers()):
+            print('giving job to extended worker')
+            extended_workers = []
+            for worker in self.active_workers:
+                if(worker.extended == True):
+                    extended_workers.append(worker)
+            extended_workers.sort(key=lambda x: len(x.jobs))
+            select = extended_workers[0]
+            select.enqueue_job(job)
         else:
             self.active_workers.sort(key=lambda x: len(x.jobs)) #sorts by number of jobs waiting to be transmitted.
             selection = self.active_workers[0]
             selection.enqueue_job(job)
-
-            # self.active_workers.sort(key=lambda x: x.cpu_trend) # sorts in ascending order, cpu load trend
-            # print('workers sorted by cpu_trend:' + str(self.active_workers))
-            # selection = self.active_workers[0]
-            # selection.enqueue_job(job)
 
     '''
     Function called by the worker to send a job back to the master.
