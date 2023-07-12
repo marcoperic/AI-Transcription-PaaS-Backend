@@ -24,7 +24,7 @@ class LoadBalancer():
     def print_worker_information(self):
         info = []
         for worker in self.active_workers:
-            info.append("[{}]: {}, {}, {}".format(worker.ip, worker.name, worker.port, str(worker.extended)))
+            info.append("[{}]: {}, {}, {}, queue: {}".format(worker.ip, worker.name, worker.port, str(worker.extended), str(len(worker.jobs))))
 
         return info
             
