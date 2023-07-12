@@ -114,7 +114,7 @@ def remove_worker():
 # http://localhost:3000/get_worker_stats?name=worker-01&ip=localhost&key=d00d37d8
 @app.route('/gpu_available', methods=['GET'])
 def get_stats():
-    return str(m.lb.any_extended_workers())
+    return  {"gpu" : m.lb.any_extended_workers()}
 
 @app.route('/get_worker_info', methods=['GET'])
 def get_info():
