@@ -2,11 +2,13 @@
 Master class that receives data and dispatches across multiple worker nodes for processing.
 '''
 from flask import Flask, request
+from flask_cors import CORS
 from load_balancer import LoadBalancer
 from threading import Thread
 import time
 
 app = Flask(__name__)
+CORS(app)
 
 class Master():
     
