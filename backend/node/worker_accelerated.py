@@ -28,7 +28,7 @@ for lang in supported_languages:
     if (lang == 'en'):
         models[lang] = subs.create_model('m-bain/whisperX', {'model_type':'medium', 'device':'cuda', 'language': lang})
 
-    models[lang] = subs.create_model('m-bain/whisperX', {'model_type':'small', 'device':'cpu', 'language': lang})
+    models[lang] = subs.create_model('m-bain/whisperX', {'model_type':'small', 'device':'cuda', 'language': lang})
 
 class Worker():
 
