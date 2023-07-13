@@ -63,7 +63,6 @@ class Worker():
     '''
     Process the response from the worker. Can be completed jobs or statistics about CPU usage for load balancing.
     : response : JSON package. server code can help ascertain which type of response it is.
-    TODO: BE SURE TO REMOVE JOB FROM QUEUE WHEN RESPONSE IS GIVEN
     '''
     def process_worker_response(self, response):
         # print('response received:' + str(response))

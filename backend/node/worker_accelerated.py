@@ -17,7 +17,7 @@ import sys
 import os
 
 subs = SubsAI()
-#warmup 
+# warmup 
 # subs.create_model('m-bain/whisperX', {'model_type':'medium.en', 'device':'cpu'})
 # supported_languages = ['en', 'fr', 'de', 'es', 'it', 'ja', 'zh', 'nl', 'uk', 'pt']
 supported_languages = ['en', 'fr', 'es', 'uk']
@@ -28,7 +28,7 @@ for lang in supported_languages:
     if (lang == 'en'):
         models[lang] = subs.create_model('m-bain/whisperX', {'model_type':'medium', 'device':'cuda', 'language': lang})
 
-    models[lang] = subs.create_model('m-bain/whisperX', {'model_type':'small', 'device':'cuda', 'language': lang, 'batch_size': 2})
+    models[lang] = subs.create_model('m-bain/whisperX', {'model_type':'small', 'device':'cpu', 'language': lang})
 
 class Worker():
 
