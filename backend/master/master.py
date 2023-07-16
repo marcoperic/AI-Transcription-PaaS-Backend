@@ -5,6 +5,7 @@ from flask import Flask, request
 from flask_cors import CORS
 from load_balancer import LoadBalancer
 from threading import Thread
+from utils import extract_audio
 import time
 
 app = Flask(__name__)
@@ -76,7 +77,9 @@ async def upload():
         return {"authentication unsuccessful"}
 
     json = request.get_json()
-    # json_retval['job']['encoded_media'] = ... convert to ogg or mp3 or whatever. use utils. be sure to set extension to mp3 or ogg.
+    if (json['job']['extension'] == 'mp4'):
+        json['job']['encoded_media'] = extract_audio(json['job']['encoded_media'])
+
     json_retval = await m.enqueue(json)
     json_retval['job']['encoded_media'] = ''
     return json_retval
