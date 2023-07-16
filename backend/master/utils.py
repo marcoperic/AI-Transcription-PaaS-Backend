@@ -16,7 +16,6 @@ def extract_audio(encoding):
     
     with open(random_name + '.mp4', 'rb') as file:
         encoding = base64.b64encode(file.read())
-        
 
     padding = b'=' * (4 - (len(encoding) % 4))  # Calculate required padding
     encoding += padding
