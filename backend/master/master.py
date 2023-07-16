@@ -76,7 +76,9 @@ async def upload():
         return {"authentication unsuccessful"}
 
     json = request.get_json()
+    # json_retval['job']['encoded_media'] = ... convert to ogg or mp3 or whatever. use utils. be sure to set extension to mp3 or ogg.
     json_retval = await m.enqueue(json)
+    json_retval['job']['encoded_media'] = ''
     return json_retval
 
 # http://localhost:3000/add_worker?name=worker-01&ip=localhost&port=9091&gpu=false&key=d00d37d8
