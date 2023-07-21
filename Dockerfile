@@ -2,9 +2,9 @@
 
 # FROM python:3.9
 
-# FROM nvidia/cuda:11.1.1-devel-ubuntu20.04
+# FROM rocm/pytorch
 
-FROM rocm/pytorch
+FROM nvidia/cuda:11.1.1-devel-ubuntu20.04
 
 ENV DEBIAN_FRONTEND=noninteractive 
 
